@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>cliutils.process</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="cliutils-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="cliutils-module.html">Package&nbsp;cliutils</a> ::
+        Module&nbsp;process
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="cliutils.process-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="cliutils.process-module.html" onclick="show_private();">Module cliutils.process</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno">  1</tt>  <tt class="py-line"><tt class="py-name">__all__</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-string">'Process'</tt><tt class="py-op">,</tt> <tt class="py-string">'sh'</tt><tt class="py-op">,</tt> <tt class="py-string">'AlreadyExecuted'</tt><tt class="py-op">,</tt> <tt class="py-string">'InvalidCommand'</tt><tt class="py-op">]</tt> </tt>
+<a name="L2"></a><tt class="py-lineno">  2</tt>  <tt class="py-line"> </tt>
+<a name="L3"></a><tt class="py-lineno">  3</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">shlex</tt> </tt>
+<a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">cStringIO</tt> <tt class="py-keyword">import</tt> <tt class="py-name">StringIO</tt> </tt>
+<a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-keyword">from</tt> <tt class="py-name">subprocess</tt> <tt class="py-keyword">import</tt> <tt class="py-name">Popen</tt><tt class="py-op">,</tt> <tt class="py-name">PIPE</tt> </tt>
+<a name="AlreadyExecuted"></a><div id="AlreadyExecuted-def"><a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"> </tt>
+<a name="L8"></a><tt class="py-lineno">  8</tt> <a class="py-toggle" href="#" id="AlreadyExecuted-toggle" onclick="return toggle('AlreadyExecuted');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="cliutils.process.AlreadyExecuted-class.html">AlreadyExecuted</a><tt class="py-op">(</tt><tt class="py-base-class">Exception</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="AlreadyExecuted-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="AlreadyExecuted-expanded"><a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line">    <tt class="py-docstring">"""A command that doesn't exist has been called."""</tt> </tt>
+</div><a name="InvalidCommand"></a><div id="InvalidCommand-def"><a name="L10"></a><tt class="py-lineno"> 10</tt> <a class="py-toggle" href="#" id="InvalidCommand-toggle" onclick="return toggle('InvalidCommand');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="cliutils.process.InvalidCommand-class.html">InvalidCommand</a><tt class="py-op">(</tt><tt class="py-base-class">Exception</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="InvalidCommand-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="InvalidCommand-expanded"><a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line">    <tt class="py-docstring">"""A command that doesn't exist has been called."""</tt> </tt>
+</div><a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
+<a name="_normalize"></a><div id="_normalize-def"><a name="L13"></a><tt class="py-lineno"> 13</tt> <a class="py-toggle" href="#" id="_normalize-toggle" onclick="return toggle('_normalize');">-</a><tt class="py-line"><tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process-module.html#_normalize">_normalize</a><tt class="py-op">(</tt><tt class="py-param">cmd</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_normalize-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_normalize-expanded"><a name="L14"></a><tt class="py-lineno"> 14</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L15"></a><tt class="py-lineno"> 15</tt>  <tt class="py-line"><tt class="py-docstring">    Turn the C{cmd} into a list suitable for subprocess.</tt> </tt>
+<a name="L16"></a><tt class="py-lineno"> 16</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L17"></a><tt class="py-lineno"> 17</tt>  <tt class="py-line"><tt class="py-docstring">    @param cmd: The command to be split into a list</tt> </tt>
+<a name="L18"></a><tt class="py-lineno"> 18</tt>  <tt class="py-line"><tt class="py-docstring">    @type cmd: str, list</tt> </tt>
+<a name="L19"></a><tt class="py-lineno"> 19</tt>  <tt class="py-line"><tt class="py-docstring">    @return: The split command, or the command passed if no splitting was</tt> </tt>
+<a name="L20"></a><tt class="py-lineno"> 20</tt>  <tt class="py-line"><tt class="py-docstring">    necessary</tt> </tt>
+<a name="L21"></a><tt class="py-lineno"> 21</tt>  <tt class="py-line"><tt class="py-docstring">    @rtype: list</tt> </tt>
+<a name="L22"></a><tt class="py-lineno"> 22</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line">    <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">,</tt> <tt class="py-op">(</tt><tt class="py-name">str</tt><tt class="py-op">,</tt> <tt class="py-name">unicode</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line">        <tt class="py-name">cmd</tt> <tt class="py-op">=</tt> <tt class="py-name">shlex</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">)</tt> </tt>
+<a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line">    <tt class="py-keyword">return</tt> <tt class="py-name">cmd</tt> </tt>
+</div><a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"> </tt>
+<a name="Process"></a><div id="Process-def"><a name="L27"></a><tt class="py-lineno"> 27</tt> <a class="py-toggle" href="#" id="Process-toggle" onclick="return toggle('Process');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="cliutils.process.Process-class.html">Process</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="Process-expanded"><a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    A wrapper for subprocess.Popen that allows bash-like pipe syntax and</tt> </tt>
+<a name="L30"></a><tt class="py-lineno"> 30</tt>  <tt class="py-line"><tt class="py-docstring">    simplified output retrieval.</tt> </tt>
+<a name="L31"></a><tt class="py-lineno"> 31</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L32"></a><tt class="py-lineno"> 32</tt>  <tt class="py-line"><tt class="py-docstring">    Processes will be executed automatically when and if stdout, stderr or a</tt> </tt>
+<a name="L33"></a><tt class="py-lineno"> 33</tt>  <tt class="py-line"><tt class="py-docstring">    return code are requested. This removes the necessity of calling</tt> </tt>
+<a name="L34"></a><tt class="py-lineno"> 34</tt>  <tt class="py-line"><tt class="py-docstring">    C{Popen().wait()} manually, or of capturing stdout and stderr from a</tt> </tt>
+<a name="L35"></a><tt class="py-lineno"> 35</tt>  <tt class="py-line"><tt class="py-docstring">    C{communicate()} call. A small change, to be sure, but it helps reduce</tt> </tt>
+<a name="L36"></a><tt class="py-lineno"> 36</tt>  <tt class="py-line"><tt class="py-docstring">    overhead for a common pattern.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno"> 37</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line"><tt class="py-docstring">    One may use the C{|} operator to pipe the output of one L{Process} into</tt> </tt>
+<a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line"><tt class="py-docstring">    another:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; p = Process("echo 'one two three'") | Process("wc -w")</tt> </tt>
+<a name="L42"></a><tt class="py-lineno"> 42</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; print p.stdout</tt> </tt>
+<a name="L43"></a><tt class="py-lineno"> 43</tt>  <tt class="py-line"><tt class="py-docstring">        3</tt> </tt>
+<a name="L44"></a><tt class="py-lineno"> 44</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L45"></a><tt class="py-lineno"> 45</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L46"></a><tt class="py-lineno"> 46</tt>  <tt class="py-line">    <tt id="link-0" class="py-name" targets="Variable cliutils.process.Process._stdin=cliutils.process.Process-class.html#_stdin"><a title="cliutils.process.Process._stdin" class="py-name" href="#" onclick="return doclink('link-0', '_stdin', 'link-0');">_stdin</a></tt>  <tt class="py-op">=</tt> <tt class="py-name">PIPE</tt> </tt>
+<a name="L47"></a><tt class="py-lineno"> 47</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable cliutils.process.Process._stdout=cliutils.process.Process-class.html#_stdout"><a title="cliutils.process.Process._stdout" class="py-name" href="#" onclick="return doclink('link-1', '_stdout', 'link-1');">_stdout</a></tt> <tt class="py-op">=</tt> <tt class="py-name">PIPE</tt> </tt>
+<a name="L48"></a><tt class="py-lineno"> 48</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable cliutils.process.Process._stderr=cliutils.process.Process-class.html#_stderr"><a title="cliutils.process.Process._stderr" class="py-name" href="#" onclick="return doclink('link-2', '_stderr', 'link-2');">_stderr</a></tt> <tt class="py-op">=</tt> <tt class="py-name">PIPE</tt> </tt>
+<a name="L49"></a><tt class="py-lineno"> 49</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable cliutils.process.Process._retcode=cliutils.process.Process-class.html#_retcode"><a title="cliutils.process.Process._retcode" class="py-name" href="#" onclick="return doclink('link-3', '_retcode', 'link-3');">_retcode</a></tt> <tt class="py-op">=</tt> <tt class="py-name">None</tt> </tt>
+<a name="L50"></a><tt class="py-lineno"> 50</tt>  <tt class="py-line"> </tt>
+<a name="Process.__init__"></a><div id="Process.__init__-def"><a name="L51"></a><tt class="py-lineno"> 51</tt> <a class="py-toggle" href="#" id="Process.__init__-toggle" onclick="return toggle('Process.__init__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__init__">__init__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">cmd</tt><tt class="py-op">,</tt> <tt class="py-param">stdin</tt><tt class="py-op">=</tt><tt class="py-name">None</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__init__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__init__-expanded"><a name="L52"></a><tt class="py-lineno"> 52</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L53"></a><tt class="py-lineno"> 53</tt>  <tt class="py-line"><tt class="py-docstring">        @param cmd: A string or list containing the command to be executed.</tt> </tt>
+<a name="L54"></a><tt class="py-lineno"> 54</tt>  <tt class="py-line"><tt class="py-docstring">        @type cmd: str, list</tt> </tt>
+<a name="L55"></a><tt class="py-lineno"> 55</tt>  <tt class="py-line"><tt class="py-docstring">        @param stdin: An optional open file object representing input to the</tt> </tt>
+<a name="L56"></a><tt class="py-lineno"> 56</tt>  <tt class="py-line"><tt class="py-docstring">        process.</tt> </tt>
+<a name="L57"></a><tt class="py-lineno"> 57</tt>  <tt class="py-line"><tt class="py-docstring">        @type stdin: file</tt> </tt>
+<a name="L58"></a><tt class="py-lineno"> 58</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: void</tt> </tt>
+<a name="L59"></a><tt class="py-lineno"> 59</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L60"></a><tt class="py-lineno"> 60</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt> <tt class="py-op">=</tt> <tt id="link-4" class="py-name" targets="Function cliutils.process._normalize()=cliutils.process-module.html#_normalize"><a title="cliutils.process._normalize" class="py-name" href="#" onclick="return doclink('link-4', '_normalize', 'link-4');">_normalize</a></tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno"> 61</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">stdin</tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L62"></a><tt class="py-lineno"> 62</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-5" class="py-name"><a title="cliutils.process.Process._stdin" class="py-name" href="#" onclick="return doclink('link-5', '_stdin', 'link-0');">_stdin</a></tt> <tt class="py-op">=</tt> <tt class="py-name">stdin</tt> </tt>
+<a name="L63"></a><tt class="py-lineno"> 63</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method cliutils.process.Process._refreshProcess()=cliutils.process.Process-class.html#_refreshProcess"><a title="cliutils.process.Process._refreshProcess" class="py-name" href="#" onclick="return doclink('link-6', '_refreshProcess', 'link-6');">_refreshProcess</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L64"></a><tt class="py-lineno"> 64</tt>  <tt class="py-line"> </tt>
+<a name="Process.__call__"></a><div id="Process.__call__-def"><a name="L65"></a><tt class="py-lineno"> 65</tt> <a class="py-toggle" href="#" id="Process.__call__-toggle" onclick="return toggle('Process.__call__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__call__">__call__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__call__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__call__-expanded"><a name="L66"></a><tt class="py-lineno"> 66</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L67"></a><tt class="py-lineno"> 67</tt>  <tt class="py-line"><tt class="py-docstring">        Shortcut to get process output.</tt> </tt>
+<a name="L68"></a><tt class="py-lineno"> 68</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L69"></a><tt class="py-lineno"> 69</tt>  <tt class="py-line"><tt class="py-docstring">        @return: Process output</tt> </tt>
+<a name="L70"></a><tt class="py-lineno"> 70</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L71"></a><tt class="py-lineno"> 71</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L72"></a><tt class="py-lineno"> 72</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Variable cliutils.process.Process.stdout=cliutils.process.Process-class.html#stdout"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-7', 'stdout', 'link-7');">stdout</a></tt> </tt>
+</div><a name="L73"></a><tt class="py-lineno"> 73</tt>  <tt class="py-line"> </tt>
+<a name="Process.__or__"></a><div id="Process.__or__-def"><a name="L74"></a><tt class="py-lineno"> 74</tt> <a class="py-toggle" href="#" id="Process.__or__-toggle" onclick="return toggle('Process.__or__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__or__">__or__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">proc</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__or__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__or__-expanded"><a name="L75"></a><tt class="py-lineno"> 75</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L76"></a><tt class="py-lineno"> 76</tt>  <tt class="py-line"><tt class="py-docstring">        Override default C{or} comparison so that the C{|} operator will work.</tt> </tt>
+<a name="L77"></a><tt class="py-lineno"> 77</tt>  <tt class="py-line"><tt class="py-docstring">        Don't call this directly.</tt> </tt>
+<a name="L78"></a><tt class="py-lineno"> 78</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L79"></a><tt class="py-lineno"> 79</tt>  <tt class="py-line"><tt class="py-docstring">        @return: Process with C{self}'s stdin as stdout pipe.</tt> </tt>
+<a name="L80"></a><tt class="py-lineno"> 80</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: L{Process}</tt> </tt>
+<a name="L81"></a><tt class="py-lineno"> 81</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L82"></a><tt class="py-lineno"> 82</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Variable cliutils.process.Process.hasExecuted=cliutils.process.Process-class.html#hasExecuted"><a title="cliutils.process.Process.hasExecuted" class="py-name" href="#" onclick="return doclink('link-8', 'hasExecuted', 'link-8');">hasExecuted</a></tt> <tt class="py-keyword">or</tt> <tt class="py-name">proc</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="cliutils.process.Process.hasExecuted" class="py-name" href="#" onclick="return doclink('link-9', 'hasExecuted', 'link-8');">hasExecuted</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L83"></a><tt class="py-lineno"> 83</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-10" class="py-name" targets="Class cliutils.process.AlreadyExecuted=cliutils.process.AlreadyExecuted-class.html"><a title="cliutils.process.AlreadyExecuted" class="py-name" href="#" onclick="return doclink('link-10', 'AlreadyExecuted', 'link-10');">AlreadyExecuted</a></tt><tt class="py-op">(</tt><tt class="py-string">"You can't pipe processes after they've been"</tt> </tt>
+<a name="L84"></a><tt class="py-lineno"> 84</tt>  <tt class="py-line">                                  <tt class="py-string">"executed."</tt><tt class="py-op">)</tt> </tt>
+<a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line">        <tt class="py-name">proc</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="cliutils.process.Process._stdin" class="py-name" href="#" onclick="return doclink('link-11', '_stdin', 'link-0');">_stdin</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-12', 'stdout', 'link-7');">stdout</a></tt> </tt>
+<a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line">        <tt class="py-name">proc</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="cliutils.process.Process._refreshProcess" class="py-name" href="#" onclick="return doclink('link-13', '_refreshProcess', 'link-6');">_refreshProcess</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">proc</tt> </tt>
+</div><a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"> </tt>
+<a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="Process.hasExecuted"></a><div id="Process.hasExecuted-def"><a name="L90"></a><tt class="py-lineno"> 90</tt> <a class="py-toggle" href="#" id="Process.hasExecuted-toggle" onclick="return toggle('Process.hasExecuted');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#hasExecuted">hasExecuted</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.hasExecuted-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.hasExecuted-expanded"><a name="L91"></a><tt class="py-lineno"> 91</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L92"></a><tt class="py-lineno"> 92</tt>  <tt class="py-line"><tt class="py-docstring">        A boolean indicating whether or not the process has already run.</tt> </tt>
+<a name="L93"></a><tt class="py-lineno"> 93</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L94"></a><tt class="py-lineno"> 94</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: bool</tt> </tt>
+<a name="L95"></a><tt class="py-lineno"> 95</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L96"></a><tt class="py-lineno"> 96</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name"><a title="cliutils.process.Process._retcode" class="py-name" href="#" onclick="return doclink('link-14', '_retcode', 'link-3');">_retcode</a></tt> <tt class="py-keyword">is</tt> <tt class="py-keyword">not</tt> <tt class="py-name">None</tt> </tt>
+</div><a name="L97"></a><tt class="py-lineno"> 97</tt>  <tt class="py-line"> </tt>
+<a name="Process._refreshProcess"></a><div id="Process._refreshProcess-def"><a name="L98"></a><tt class="py-lineno"> 98</tt> <a class="py-toggle" href="#" id="Process._refreshProcess-toggle" onclick="return toggle('Process._refreshProcess');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#_refreshProcess">_refreshProcess</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process._refreshProcess-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process._refreshProcess-expanded"><a name="L99"></a><tt class="py-lineno"> 99</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name"><a title="cliutils.process.Process.hasExecuted" class="py-name" href="#" onclick="return doclink('link-15', 'hasExecuted', 'link-8');">hasExecuted</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L100"></a><tt class="py-lineno">100</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-16" class="py-name"><a title="cliutils.process.AlreadyExecuted" class="py-name" href="#" onclick="return doclink('link-16', 'AlreadyExecuted', 'link-10');">AlreadyExecuted</a></tt><tt class="py-op">(</tt><tt class="py-string">""</tt><tt class="py-op">)</tt> </tt>
+<a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-keyword">del</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt> </tt>
+<a name="L102"></a><tt class="py-lineno">102</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">AttributeError</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+<a name="L103"></a><tt class="py-lineno">103</tt>  <tt class="py-line">        <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
+<a name="L104"></a><tt class="py-lineno">104</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt> <tt class="py-op">=</tt> <tt class="py-name">Popen</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">,</tt>  </tt>
+<a name="L105"></a><tt class="py-lineno">105</tt>  <tt class="py-line">                                  <tt class="py-name">stdin</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-17" class="py-name"><a title="cliutils.process.Process._stdin" class="py-name" href="#" onclick="return doclink('link-17', '_stdin', 'link-0');">_stdin</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L106"></a><tt class="py-lineno">106</tt>  <tt class="py-line">                                  <tt id="link-18" class="py-name"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-18', 'stdout', 'link-7');">stdout</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="cliutils.process.Process._stdout" class="py-name" href="#" onclick="return doclink('link-19', '_stdout', 'link-1');">_stdout</a></tt><tt class="py-op">,</tt> </tt>
+<a name="L107"></a><tt class="py-lineno">107</tt>  <tt class="py-line">                                  <tt id="link-20" class="py-name" targets="Variable cliutils.process.Process.stderr=cliutils.process.Process-class.html#stderr"><a title="cliutils.process.Process.stderr" class="py-name" href="#" onclick="return doclink('link-20', 'stderr', 'link-20');">stderr</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-21" class="py-name"><a title="cliutils.process.Process._stderr" class="py-name" href="#" onclick="return doclink('link-21', '_stderr', 'link-2');">_stderr</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line">        <tt class="py-keyword">except</tt> <tt class="py-name">OSError</tt><tt class="py-op">,</tt> <tt class="py-name">e</tt><tt class="py-op">:</tt> </tt>
+<a name="L109"></a><tt class="py-lineno">109</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt id="link-22" class="py-name" targets="Class cliutils.process.InvalidCommand=cliutils.process.InvalidCommand-class.html"><a title="cliutils.process.InvalidCommand" class="py-name" href="#" onclick="return doclink('link-22', 'InvalidCommand', 'link-22');">InvalidCommand</a></tt><tt class="py-op">(</tt><tt class="py-string">" "</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_command</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L110"></a><tt class="py-lineno">110</tt>  <tt class="py-line"> </tt>
+<a name="Process._execute"></a><div id="Process._execute-def"><a name="L111"></a><tt class="py-lineno">111</tt> <a class="py-toggle" href="#" id="Process._execute-toggle" onclick="return toggle('Process._execute');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#_execute">_execute</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process._execute-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process._execute-expanded"><a name="L112"></a><tt class="py-lineno">112</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="cliutils.process.Process.hasExecuted" class="py-name" href="#" onclick="return doclink('link-23', 'hasExecuted', 'link-8');">hasExecuted</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L113"></a><tt class="py-lineno">113</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="cliutils.process.Process._retcode" class="py-name" href="#" onclick="return doclink('link-24', '_retcode', 'link-3');">_retcode</a></tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt><tt class="py-op">.</tt><tt class="py-name">wait</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L114"></a><tt class="py-lineno">114</tt>  <tt class="py-line"> </tt>
+<a name="Process.__str__"></a><div id="Process.__str__-def"><a name="L115"></a><tt class="py-lineno">115</tt> <a class="py-toggle" href="#" id="Process.__str__-toggle" onclick="return toggle('Process.__str__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__str__">__str__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__str__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__str__-expanded"><a name="L116"></a><tt class="py-lineno">116</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-25', 'stdout', 'link-7');">stdout</a></tt> </tt>
+</div><a name="L117"></a><tt class="py-lineno">117</tt>  <tt class="py-line"> </tt>
+<a name="Process.__repr__"></a><div id="Process.__repr__-def"><a name="L118"></a><tt class="py-lineno">118</tt> <a class="py-toggle" href="#" id="Process.__repr__-toggle" onclick="return toggle('Process.__repr__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__repr__">__repr__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__repr__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__repr__-expanded"><a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-26', 'stdout', 'link-7');">stdout</a></tt> </tt>
+</div><a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line"> </tt>
+<a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="Process.stdout"></a><div id="Process.stdout-def"><a name="L122"></a><tt class="py-lineno">122</tt> <a class="py-toggle" href="#" id="Process.stdout-toggle" onclick="return toggle('Process.stdout');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#stdout">stdout</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.stdout-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.stdout-expanded"><a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L124"></a><tt class="py-lineno">124</tt>  <tt class="py-line"><tt class="py-docstring">        Retrieve the contents of stdout, executing the process first if</tt> </tt>
+<a name="L125"></a><tt class="py-lineno">125</tt>  <tt class="py-line"><tt class="py-docstring">        necessary.</tt> </tt>
+<a name="L126"></a><tt class="py-lineno">126</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L127"></a><tt class="py-lineno">127</tt>  <tt class="py-line"><tt class="py-docstring">        @return: The process output</tt> </tt>
+<a name="L128"></a><tt class="py-lineno">128</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L129"></a><tt class="py-lineno">129</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L130"></a><tt class="py-lineno">130</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name" targets="Method cliutils.process.Process._execute()=cliutils.process.Process-class.html#_execute"><a title="cliutils.process.Process._execute" class="py-name" href="#" onclick="return doclink('link-27', '_execute', 'link-27');">_execute</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L131"></a><tt class="py-lineno">131</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-string">'_stdoutstorage'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L132"></a><tt class="py-lineno">132</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stdoutstorage</tt> <tt class="py-op">=</tt> <tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="cliutils.process.Process.stdout" class="py-name" href="#" onclick="return doclink('link-28', 'stdout', 'link-7');">stdout</a></tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L133"></a><tt class="py-lineno">133</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stdoutstorage</tt><tt class="py-op">.</tt><tt class="py-name">getvalue</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L134"></a><tt class="py-lineno">134</tt>  <tt class="py-line"> </tt>
+<a name="L135"></a><tt class="py-lineno">135</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="Process.stderr"></a><div id="Process.stderr-def"><a name="L136"></a><tt class="py-lineno">136</tt> <a class="py-toggle" href="#" id="Process.stderr-toggle" onclick="return toggle('Process.stderr');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#stderr">stderr</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.stderr-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.stderr-expanded"><a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L138"></a><tt class="py-lineno">138</tt>  <tt class="py-line"><tt class="py-docstring">        Retrieve the contents of stderr, executing the process first if</tt> </tt>
+<a name="L139"></a><tt class="py-lineno">139</tt>  <tt class="py-line"><tt class="py-docstring">        necessary.</tt> </tt>
+<a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L141"></a><tt class="py-lineno">141</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: str</tt> </tt>
+<a name="L142"></a><tt class="py-lineno">142</tt>  <tt class="py-line"><tt class="py-docstring">        @return: The process error output</tt> </tt>
+<a name="L143"></a><tt class="py-lineno">143</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L144"></a><tt class="py-lineno">144</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="cliutils.process.Process._execute" class="py-name" href="#" onclick="return doclink('link-29', '_execute', 'link-27');">_execute</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L145"></a><tt class="py-lineno">145</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">hasattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-string">'_stderrstorage'</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L146"></a><tt class="py-lineno">146</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stdoutstorage</tt> <tt class="py-op">=</tt> <tt class="py-name">StringIO</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="cliutils.process.Process.stderr" class="py-name" href="#" onclick="return doclink('link-30', 'stderr', 'link-20');">stderr</a></tt><tt class="py-op">.</tt><tt class="py-name">read</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">strip</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L147"></a><tt class="py-lineno">147</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_stderrstorage</tt><tt class="py-op">.</tt><tt class="py-name">getvalue</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L148"></a><tt class="py-lineno">148</tt>  <tt class="py-line"> </tt>
+<a name="L149"></a><tt class="py-lineno">149</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="Process.retcode"></a><div id="Process.retcode-def"><a name="L150"></a><tt class="py-lineno">150</tt> <a class="py-toggle" href="#" id="Process.retcode-toggle" onclick="return toggle('Process.retcode');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#retcode">retcode</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.retcode-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.retcode-expanded"><a name="L151"></a><tt class="py-lineno">151</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L152"></a><tt class="py-lineno">152</tt>  <tt class="py-line"><tt class="py-docstring">        Get the exit code of the executed process, executing the process</tt> </tt>
+<a name="L153"></a><tt class="py-lineno">153</tt>  <tt class="py-line"><tt class="py-docstring">        first if necessary.</tt> </tt>
+<a name="L154"></a><tt class="py-lineno">154</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L155"></a><tt class="py-lineno">155</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L156"></a><tt class="py-lineno">156</tt>  <tt class="py-line"><tt class="py-docstring">        @return: The exit code of the process</tt> </tt>
+<a name="L157"></a><tt class="py-lineno">157</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L158"></a><tt class="py-lineno">158</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="cliutils.process.Process._execute" class="py-name" href="#" onclick="return doclink('link-31', '_execute', 'link-27');">_execute</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L159"></a><tt class="py-lineno">159</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="cliutils.process.Process._retcode" class="py-name" href="#" onclick="return doclink('link-32', '_retcode', 'link-3');">_retcode</a></tt> </tt>
+</div><a name="L160"></a><tt class="py-lineno">160</tt>  <tt class="py-line">     </tt>
+<a name="L161"></a><tt class="py-lineno">161</tt>  <tt class="py-line">    <tt class="py-decorator">@</tt><tt class="py-decorator">property</tt> </tt>
+<a name="Process.pid"></a><div id="Process.pid-def"><a name="L162"></a><tt class="py-lineno">162</tt> <a class="py-toggle" href="#" id="Process.pid-toggle" onclick="return toggle('Process.pid');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#pid">pid</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.pid-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.pid-expanded"><a name="L163"></a><tt class="py-lineno">163</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L164"></a><tt class="py-lineno">164</tt>  <tt class="py-line"><tt class="py-docstring">        Get the pid of the executed process.</tt> </tt>
+<a name="L165"></a><tt class="py-lineno">165</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L166"></a><tt class="py-lineno">166</tt>  <tt class="py-line"><tt class="py-docstring">        @return: The process pid</tt> </tt>
+<a name="L167"></a><tt class="py-lineno">167</tt>  <tt class="py-line"><tt class="py-docstring">        @rtype: int</tt> </tt>
+<a name="L168"></a><tt class="py-lineno">168</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L169"></a><tt class="py-lineno">169</tt>  <tt class="py-line">        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="cliutils.process.Process._execute" class="py-name" href="#" onclick="return doclink('link-33', '_execute', 'link-27');">_execute</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L170"></a><tt class="py-lineno">170</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">_process</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Variable cliutils.process.Process.pid=cliutils.process.Process-class.html#pid"><a title="cliutils.process.Process.pid" class="py-name" href="#" onclick="return doclink('link-34', 'pid', 'link-34');">pid</a></tt> </tt>
+</div><a name="L171"></a><tt class="py-lineno">171</tt>  <tt class="py-line"> </tt>
+<a name="Process.__del__"></a><div id="Process.__del__-def"><a name="L172"></a><tt class="py-lineno">172</tt> <a class="py-toggle" href="#" id="Process.__del__-toggle" onclick="return toggle('Process.__del__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process.Process-class.html#__del__">__del__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Process.__del__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Process.__del__-expanded"><a name="L173"></a><tt class="py-lineno">173</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L174"></a><tt class="py-lineno">174</tt>  <tt class="py-line"><tt class="py-docstring">        Make dead sure the process has been cleaned up when garbage is</tt> </tt>
+<a name="L175"></a><tt class="py-lineno">175</tt>  <tt class="py-line"><tt class="py-docstring">        collected.</tt> </tt>
+<a name="L176"></a><tt class="py-lineno">176</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L177"></a><tt class="py-lineno">177</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="cliutils.process.Process.hasExecuted" class="py-name" href="#" onclick="return doclink('link-35', 'hasExecuted', 'link-8');">hasExecuted</a></tt><tt class="py-op">:</tt> </tt>
+<a name="L178"></a><tt class="py-lineno">178</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">kill</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="cliutils.process.Process.pid" class="py-name" href="#" onclick="return doclink('link-36', 'pid', 'link-34');">pid</a></tt><tt class="py-op">,</tt> <tt class="py-number">9</tt><tt class="py-op">)</tt> </tt>
+<a name="L179"></a><tt class="py-lineno">179</tt>  <tt class="py-line">            <tt class="py-keyword">except</tt><tt class="py-op">:</tt> <tt class="py-keyword">pass</tt> </tt>
+</div></div><a name="L180"></a><tt class="py-lineno">180</tt>  <tt class="py-line"> </tt>
+<a name="_shell"></a><div id="_shell-def"><a name="L181"></a><tt class="py-lineno">181</tt>  <tt class="py-line"> </tt>
+<a name="L182"></a><tt class="py-lineno">182</tt> <a class="py-toggle" href="#" id="_shell-toggle" onclick="return toggle('_shell');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="cliutils.process._shell-class.html">_shell</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_shell-collapsed" style="display:none;" pad="+++" indent="++++"></div><div id="_shell-expanded"><a name="L183"></a><tt class="py-lineno">183</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L184"></a><tt class="py-lineno">184</tt>  <tt class="py-line"><tt class="py-docstring">    Singleton class that creates Process objects for commands passed. </tt> </tt>
+<a name="L185"></a><tt class="py-lineno">185</tt>  <tt class="py-line"><tt class="py-docstring">    </tt> </tt>
+<a name="L186"></a><tt class="py-lineno">186</tt>  <tt class="py-line"><tt class="py-docstring">    Not meant to be instantiated; use the C{sh} instance.</tt> </tt>
+<a name="L187"></a><tt class="py-lineno">187</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L188"></a><tt class="py-lineno">188</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; p = sh.wc("-w")</tt> </tt>
+<a name="L189"></a><tt class="py-lineno">189</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; p.__class__</tt> </tt>
+<a name="L190"></a><tt class="py-lineno">190</tt>  <tt class="py-line"><tt class="py-docstring">        &lt;class 'cliutils.process.Process'&gt;</tt> </tt>
+<a name="L191"></a><tt class="py-lineno">191</tt>  <tt class="py-line"><tt class="py-docstring">        &gt;&gt;&gt; p._command</tt> </tt>
+<a name="L192"></a><tt class="py-lineno">192</tt>  <tt class="py-line"><tt class="py-docstring">        ['wc', '-w']</tt> </tt>
+<a name="L193"></a><tt class="py-lineno">193</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
+<a name="L194"></a><tt class="py-lineno">194</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="_shell.__getattribute__"></a><div id="_shell.__getattribute__-def"><a name="L195"></a><tt class="py-lineno">195</tt> <a class="py-toggle" href="#" id="_shell.__getattribute__-toggle" onclick="return toggle('_shell.__getattribute__');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="cliutils.process._shell-class.html#__getattribute__">__getattribute__</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">attr</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="_shell.__getattribute__-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="_shell.__getattribute__-expanded"><a name="L196"></a><tt class="py-lineno">196</tt>  <tt class="py-line">        <tt class="py-keyword">def</tt> <tt class="py-def-name">inner</tt><tt class="py-op">(</tt><tt class="py-param">cmd</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L197"></a><tt class="py-lineno">197</tt>  <tt class="py-line">            <tt class="py-name">command</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-name">attr</tt><tt class="py-op">]</tt> </tt>
+<a name="L198"></a><tt class="py-lineno">198</tt>  <tt class="py-line">            <tt class="py-name">command</tt><tt class="py-op">.</tt><tt class="py-name">extend</tt><tt class="py-op">(</tt><tt id="link-37" class="py-name"><a title="cliutils.process._normalize" class="py-name" href="#" onclick="return doclink('link-37', '_normalize', 'link-4');">_normalize</a></tt><tt class="py-op">(</tt><tt class="py-name">cmd</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L199"></a><tt class="py-lineno">199</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt id="link-38" class="py-name" targets="Class cliutils.process.Process=cliutils.process.Process-class.html"><a title="cliutils.process.Process" class="py-name" href="#" onclick="return doclink('link-38', 'Process', 'link-38');">Process</a></tt><tt class="py-op">(</tt><tt class="py-name">command</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L200"></a><tt class="py-lineno">200</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">inner</tt> </tt>
+</div></div><a name="L201"></a><tt class="py-lineno">201</tt>  <tt class="py-line"><tt id="link-39" class="py-name" targets="Variable cliutils.process.sh=cliutils.process-module.html#sh,Variable cliutils.sh=cliutils-module.html#sh"><a title="cliutils.process.sh
+cliutils.sh" class="py-name" href="#" onclick="return doclink('link-39', 'sh', 'link-39');">sh</a></tt> <tt class="py-op">=</tt> <tt id="link-40" class="py-name" targets="Class cliutils.process._shell=cliutils.process._shell-class.html"><a title="cliutils.process._shell" class="py-name" href="#" onclick="return doclink('link-40', '_shell', 'link-40');">_shell</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="cliutils-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Sep 18 12:44:24 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>cliutils</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;cliutils
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="cliutils-module.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== PACKAGE DESCRIPTION ==================== -->
+<h1 class="epydoc">Package cliutils</h1><p class="nomargin-top"><span class="codelink"><a href="cliutils-pysrc.html">source&nbsp;code</a></span></p>
+<p>A collection of utilities easing the creation of command line 
+  scripts.</p>
+  <p>cliutils is pure Python with no dependencies.</p>
+  <p>At the moment, the module provides three disparate features: Process 
+  objects, a command-line argument parsing decorator, and a logging 
+  decorator factory.</p>
+  <h1 class="heading">Process objects</h1>
+    <p>Although it isn't very difficult to execute shell commands from a 
+    Python script, there are several lines of overhead in the standard 
+    pattern. Process objects reduce the entire pattern to a single line. In
+    addition, they are more flexible; they may be piped into each other, 
+    just as regular processes may be on the bash command line.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>Process(<span class="py-string">&quot;echo 'spam and eggs'&quot;</span>)
+<span class="py-output">spam and eggs</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>s = Process(<span class="py-string">&quot;echo 'spam and eggs'&quot;</span>).stdout
+<span class="py-prompt">&gt;&gt;&gt; </span>s
+<span class="py-output">'spam and eggs'</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>p = Process(<span class="py-string">&quot;echo 'spam and eggs'&quot;</span>) | Process(<span class="py-string">&quot;wc -w&quot;</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>p.stdout
+<span class="py-output">'3'</span></pre>
+    <p>For convenience, a singleton object (<a 
+    href="cliutils-module.html#sh" class="link">sh</a>) is provided that is
+    able to create process objects from given attributes.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sh.echo(<span class="py-string">&quot;spam and eggs&quot;</span>) | sh.wc(<span class="py-string">&quot;-w&quot;</span>) | sh.cat()
+<span class="py-output">3</span></pre>
+    <p>Arguments passed to Process objects are split using the 
+    <code>shlex</code> module, so most simple strings will work just fine. 
+    More complex arguments should be passed in as lists:</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span>sh.echo([<span class="py-string">&quot;spam&quot;</span>, <span class="py-string">&quot;and&quot;</span>, <span class="py-string">&quot;eggs&quot;</span>])
+<span class="py-output">spam and eggs</span></pre>
+  <h1 class="heading">The <a href="cliutils.decorators-module.html#cliargs" class="link">cliargs</a> decorator</h1>
+    <p>A common pattern for shell scripts is:</p>
+<pre class="literalblock">
+   def main():
+       parser = make_an_option_parser()
+       parser.parse(sys.argv[1:])
+       do_some_stuff_with_options()
+
+   if __name__==&quot;__main__&quot;:
+       main()
+</pre>
+    <p>Creation of shell scripts using <code>setuptools</code>' 
+    <code>entry_points</code> results in a similar pattern; a function is 
+    called with no arguments, and must do its own command-line argument 
+    parsing. This makes sense in some cases, where complex argument parsing
+    is required. In simple cases, however, where parsing of a few arguments
+    or keywords is required, the <a 
+    href="cliutils.decorators-module.html#cliargs" class="link">cliargs</a>
+    decorator will be of use. It does a simple parse of 
+    <code>sys.argv</code>, using a parsing algorithm based on some code in 
+    <code>getopt</code>, and calls the decorated function with the 
+    results:</p>
+<pre class="literalblock">
+   @cliargs
+   def myScript(anarg, anotherarg, someval=&quot;default&quot;)
+       &quot;Usage: myscript anarg anotherarg [--someval VALUE]&quot;
+       print anarg anotherarg someval
+</pre>
+    <p>When that function is called as a result of a command line script, 
+    such as:</p>
+<pre class="literalblock">
+   $ myscript val1 val2 --someflag somevalue 
+</pre>
+    <p><a href="cliutils.decorators-module.html#cliargs" 
+    class="link">cliargs</a> will parse <code>sys.argv</code> and pass the 
+    results into myScript. If improper arguments are passed such that a 
+    <code>TypeError</code> is raised, the docstring of the function will be
+    printed; this makes that an ideal place to include a usage string.</p>
+    <p><a href="cliutils.decorators-module.html#cliargs" 
+    class="link">cliargs</a> is of course limited to very simple cases. 
+    More complex argument parsing will require the use of the 
+    <code>getopt</code> or <code>optparse</code> modules.</p>
+  <h1 class="heading"><a href="cliutils.decorators-module.html#log_decorator" class="link">log_decorator</a></h1>
+    <p><a href="cliutils.decorators-module.html#log_decorator" 
+    class="link">log_decorator</a> is an almost trivially simple decorator 
+    factory. When called with a file-like object, it returns a decorator 
+    that redirects <code>sys.stdout</code> to that file for the duration of
+    the execution of the decorated function.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile = StringIO()
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = log_decorator(logfile)
+<span class="py-prompt">&gt;&gt;&gt; </span>@logger
+<span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">func</span>():
+<span class="py-more">... </span>    <span class="py-keyword">print</span> <span class="py-string">&quot;ABCDEFGHIJK&quot;</span>
+<span class="py-more">... </span>
+<span class="py-prompt">&gt;&gt;&gt; </span>func()
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile.seek(0)
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile.read().strip()
+<span class="py-output">'ABCDEFGHIJK'</span></pre>
+
+<hr />
+<div class="fields">      <p><strong>Version:</strong>
+        0.1
+      </p>
+</div><!-- ==================== SUBMODULES ==================== -->
+<a name="section-Submodules"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Submodules</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Submodules"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+  <tr><td class="summary">
+  <ul class="nomargin">
+    <li class="private"> <strong class="uidlink"><a href="cliutils.decorators-module.html" onclick="show_private();">cliutils.decorators</a></strong>    </li>
+    <li class="private"> <strong class="uidlink"><a href="cliutils.process-module.html" onclick="show_private();">cliutils.process</a></strong>    </li>
+  </ul></td></tr>
+</table>
+
+<br />
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="cliutils.process.Process-class.html" class="summary-name">Process</a><br />
+      A wrapper for subprocess.Popen that allows bash-like pipe syntax 
+        and simplified output retrieval.
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTIONS ==================== -->
+<a name="section-Functions"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Functions</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Functions"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils-module.html#cliargs" class="summary-sig-name">cliargs</a>(<span class="summary-sig-arg">f</span>)</span><br />
+      Decorator that parses <code>sys.argv</code> and passes the results 
+      into the function.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#cliargs">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils-module.html#log_decorator" class="summary-sig-name">log_decorator</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
+      Create a <a href="cliutils.decorators-module.html#logged" 
+      class="link">logged</a> decorator for re-use.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== VARIABLES ==================== -->
+<a name="section-Variables"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Variables</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Variables"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="sh"></a><span class="summary-name">sh</span> = <code title="_shell()">_shell()</code>
+    </td>
+  </tr>
+</table>
+<!-- ==================== FUNCTION DETAILS ==================== -->
+<a name="section-FunctionDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Function Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-FunctionDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="cliargs"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">cliargs</span>(<span class="sig-arg">f</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#cliargs">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Decorator that parses <code>sys.argv</code> and passes the results 
+  into the function.</p>
+  <p>Meant for functions that are a target of setuptools' automatic script 
+  creation (by default, nothing is passed in, and the function must handle 
+  sys.argv parsing itself). If something very simple is all that is 
+  required, this is the answer. Fancier arguments should use 
+  <code>getopt</code> or <code>optparse</code>.</p>
+  <p>If the wrong args/kwargs are passed in such that a TypeError is 
+  raised, the docstring is printed, so that's an ideal place to put usage 
+  information.</p>
+  <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@decorator</code></li>
+    </ul></dd>
+  </dl>
+</td></tr></table>
+</div>
+<a name="log_decorator"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">log_decorator</span>(<span class="sig-arg">fobj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create a <a href="cliutils.decorators-module.html#logged" 
+  class="link">logged</a> decorator for re-use.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile = StringIO()
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = log_decorator(logfile)
+<span class="py-prompt">&gt;&gt;&gt; </span>@logger
+<span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">func</span>():
+<span class="py-more">... </span>    <span class="py-keyword">print</span> <span class="py-string">&quot;ABCDEFGHIJK&quot;</span>
+<span class="py-more">... </span>
+<span class="py-prompt">&gt;&gt;&gt; </span>func()
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile.seek(0)
+<span class="py-prompt">&gt;&gt;&gt; </span>logfile.read().strip()
+<span class="py-output">'ABCDEFGHIJK'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th bgcolor="#70b0f0" class="navbar-select"
+          >&nbsp;&nbsp;&nbsp;Home&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+      <th class="navbar" width="100%"></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Thu Sep 18 12:44:24 2008
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
