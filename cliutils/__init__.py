@@ -96,14 +96,14 @@ L{log_decorator}
         'ABCDEFGHIJK'
 
 L{indir}
-=======
+========
     L{indir} is a decorator factory that runs the decorated function in a given
     directory, changing back to the original directory on completion.
 
 """
-__version__="0.1"
+__version__="0.1.1"
 __all__=["sh", "Process", "cliargs", "log_decorator"]
 
 from process import sh, Process
-from decorators import cliargs, log_decorator
+from decorators import cliargs, log_decorator, indir
 

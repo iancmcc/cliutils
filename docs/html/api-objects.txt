@@ -2,11 +2,13 @@ cliutils	cliutils-module.html
 cliutils.cliargs	cliutils-module.html#cliargs
 cliutils.sh	cliutils-module.html#sh
 cliutils.log_decorator	cliutils-module.html#log_decorator
+cliutils.indir	cliutils.decorators-module.html#indir
 cliutils.decorators	cliutils.decorators-module.html
-cliutils.decorators.logged	cliutils.decorators-module.html#logged
-cliutils.decorators.decorator	cliutils.decorators-module.html#decorator
 cliutils.decorators.cliargs	cliutils.decorators-module.html#cliargs
+cliutils.decorators.logged	cliutils.decorators-module.html#logged
 cliutils.decorators.log_decorator	cliutils.decorators-module.html#log_decorator
+cliutils.decorators.decorator	cliutils.decorators-module.html#decorator
+cliutils.decorators.indir	cliutils.decorators-module.html#indir
 cliutils.process	cliutils.process-module.html
 cliutils.process.sh	cliutils.process-module.html#sh
 cliutils.process._normalize	cliutils.process-module.html#_normalize
