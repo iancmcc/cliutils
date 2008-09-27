@@ -1,8 +1,11 @@
 import unittest
-from StringIO import StringIO
-import sys
 
-from cliutils.decorators import cliargs, logged, decorator
+import os
+import sys
+import tempfile
+from StringIO import StringIO
+
+from cliutils.decorators import cliargs, logged, decorator, indir
 
 class TestDecorators(unittest.TestCase):
 
@@ -65,6 +68,17 @@ class TestDecorators(unittest.TestCase):
         s.seek(0)
         result = s.read()
         self.assertEqual(result.strip(), token)
+
+    def test_indir(self):
+        d = os.path.realpath(tempfile.mkdtemp())
+        curdir = os.path.realpath(os.curdir)
+        self.assert_(d!=curdir)
+        @indir(d)
+        def whereami():
+            return os.path.realpath(os.curdir)
+        newdir = whereami()
+        self.assertEqual(newdir, d)
+        self.assertEqual(os.path.realpath(os.curdir), curdir)
 
 if __name__=="__main__":
     unittest.main()

@@ -1,3 +1,4 @@
+import os
 import sys
 __all__ = ["cliargs", "logged", "log_decorator"]
 
@@ -90,4 +91,33 @@ def log_decorator(fobj):
     """
     return logged(fobj)
 
+
+def indir(newdir):
+    """
+    Factory for decorator that ensures the decorated function is run in a
+    specified directory, then changes back to original directory.
+
+        >>> import tempfile
+        >>> realpath = os.path.realpath
+        >>> new, cur = map(realpath, (tempfile.mkdtemp(), os.curdir))
+        >>> @indir(new)
+        ... def whereami():
+        ...     return realpath(os.curdir)
+        ...
+        >>> whereami() == new
+        True
+        >>> realpath(os.curdir) == cur
+        True
+
+    """
+    @decorator
+    def dec(f):
+        def inner(*args, **kwargs):
+            olddir = os.path.abspath(os.curdir)
+            os.chdir(newdir)
+            result = f(*args, **kwargs)
+            os.chdir(olddir)
+            return result
+        return inner
+    return dec
 

@@ -4,7 +4,8 @@ A collection of utilities easing the creation of command line scripts.
 cliutils is pure Python with no dependencies.
 
 At the moment, the module provides three disparate features: Process objects, a
-command-line argument parsing decorator, and a logging decorator factory.
+command-line argument parsing decorator, a logging decoratory factory, and a
+decorator factory that runs functions after changing to a given directory.
 
 Process objects
 ===============
@@ -93,6 +94,11 @@ L{log_decorator}
         >>> logfile.seek(0)
         >>> logfile.read().strip()
         'ABCDEFGHIJK'
+
+L{indir}
+=======
+    L{indir} is a decorator factory that runs the decorated function in a given
+    directory, changing back to the original directory on completion.
 
 """
 __version__="0.1"
