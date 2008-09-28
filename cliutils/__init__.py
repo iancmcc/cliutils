@@ -101,7 +101,7 @@ L{indir}
     directory, changing back to the original directory on completion.
 
 """
-__version__="0.1.1"
+__version__="0.1.2"
 __all__=["sh", "Process", "cliargs", "log_decorator"]
 
 from process import sh, Process

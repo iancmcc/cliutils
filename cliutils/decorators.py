@@ -1,6 +1,6 @@
 import os
 import sys
-__all__ = ["cliargs", "redirect", "redirect_decorator"]
+__all__ = ["cliargs", "redirect", "redirect_decorator", "CLIargsError"]
 
 def decorator(callable):
     """
@@ -22,6 +22,9 @@ def decorator(callable):
     inner.__doc__ = callable.__doc__
     inner.__dict__.update(callable.__dict__)
     return inner
+
+class CLIargsError(Exception):
+    "Arguments were not passed in correctly."
 
 @decorator
 def cliargs(callable):
@@ -51,8 +54,13 @@ def cliargs(callable):
             else:
                 prog_args.append(args[0])
                 args = args[1:]
-        try: return callable(*prog_args, **opts)
-        except TypeError: print callable.__doc__
+        try:
+            try: 
+                return callable(*prog_args, **opts)
+            except TypeError, e: 
+                raise CLIargsError(e)
+        except CLIargsError:
+            print callable.__doc__
     return inner
 
 def redirect(fobj):

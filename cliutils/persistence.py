@@ -27,6 +27,66 @@ def storage_dir(directory=""):
     return directory
 
 
+class _ConfigSection(object):
+    """
+    Wrapper that provides dictionary-like access
+    """
+    def __init__(self, config, name, savefunc):
+        self.name = name
+        self.config = config
+        self.savefunc = savefunc
+
+    def __getitem__(self, key):
+        return self.config.get(self.name, key)
+
+    def __setitem__(self, key, value):
+        value = str(value)
+        if not self.config.has_section(self.name):
+            self.config.add_section(self.name)
+        self.config.set(self.name, key, value)
+        self.savefunc()
+
+    def __str__(self):
+        return str(dict(self.items()))
+
+    def items(self):
+        return zip(self.keys(), self.values())
+
+    def keys(self):
+        return self.config.options(self.name)
+
+    def values(self):
+        return [self[key] for key in self.keys()]
+
+
+class ConfigStorage(object):
+
+    filename = ""
+    _config = ConfigParser()
+
+    def __init__(self, filename):
+        self.filename = filename
+        if os.path.exists(filename):
+            self.load()
+        else:
+            self.save()
+
+    def load(self):
+        self._config.read(self.filename)
+
+    def save(self):
+        f = file(self.filename, 'w')
+        self._config.write(f)
+        f.close()
+
+    def __getitem__(self, item):
+        return _ConfigSection(self._config, item, self.save)
+
+    def keys(self):
+        return self._config.sections()
+    sections = keys
+
+
 def config(filename, directory=""):
     """
     Open and parse a config file C{filename} in an optional given directory
@@ -37,7 +97,8 @@ def config(filename, directory=""):
     the user's home directory itself.
     """
     directory = storage_dir(directory)
-    return ConfigParser(os.path.join(directory, filename))
+    config = ConfigStorage(os.path.join(directory, filename))
+    return config
 
 
 def db(filename, directory=""):
