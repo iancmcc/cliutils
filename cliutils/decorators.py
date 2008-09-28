@@ -1,6 +1,6 @@
 import os
 import sys
-__all__ = ["cliargs", "logged", "log_decorator"]
+__all__ = ["cliargs", "redirect", "redirect_decorator"]
 
 def decorator(callable):
     """
@@ -55,7 +55,7 @@ def cliargs(callable):
         except TypeError: print callable.__doc__
     return inner
 
-def logged(fobj):
+def redirect(fobj):
     """
     Factory for a decorator that redirects sys.stdout to a given file-like
     object during function execution. Thus, C{print} statements can become
@@ -72,13 +72,13 @@ def logged(fobj):
         return inner
     return logdecorator
 
-def log_decorator(fobj):
+def redirect_decorator(fobj):
     """
-    Create a L{logged} decorator for re-use.
+    Create a L{redirect} decorator for re-use.
 
         >>> from StringIO import StringIO
         >>> logfile = StringIO()
-        >>> logger = log_decorator(logfile)
+        >>> logger = redirect_decorator(logfile)
         >>> @logger
         ... def func():
         ...     print "ABCDEFGHIJK"
@@ -89,7 +89,7 @@ def log_decorator(fobj):
         'ABCDEFGHIJK'
 
     """
-    return logged(fobj)
+    return redirect(fobj)
 
 
 def indir(newdir):

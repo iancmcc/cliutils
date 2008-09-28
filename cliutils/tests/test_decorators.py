@@ -5,7 +5,7 @@ import sys
 import tempfile
 from StringIO import StringIO
 
-from cliutils.decorators import cliargs, logged, decorator, indir
+from cliutils.decorators import cliargs, redirect, decorator, indir
 
 class TestDecorators(unittest.TestCase):
 
@@ -58,10 +58,10 @@ class TestDecorators(unittest.TestCase):
         result = sys.stdout.read()
         self.assertEqual(result.strip(), "Usage information")
 
-    def test_logged(self):
+    def test_redirect(self):
         s = StringIO()
         token = "ABCDEFG"
-        @logged(s)
+        @redirect(s)
         def func():
             print token
         func()

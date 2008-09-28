@@ -76,16 +76,16 @@ The L{cliargs} decorator
     L{cliargs} is of course limited to very simple cases. More complex argument
     parsing will require the use of the C{getopt} or C{optparse} modules.
 
-L{log_decorator}
-================
-    L{log_decorator} is an almost trivially simple decorator factory. When
+L{redirect_decorator}
+====================
+    L{redirect_decorator} is an almost trivially simple decorator factory. When
     called with a file-like object, it returns a decorator that redirects
     C{sys.stdout} to that file for the duration of the execution of the
     decorated function.
 
         >>> from StringIO import StringIO
         >>> logfile = StringIO()
-        >>> logger = log_decorator(logfile)
+        >>> logger = redirect_decorator(logfile)
         >>> @logger
         ... def func():
         ...     print "ABCDEFGHIJK"
@@ -105,5 +105,5 @@ __version__="0.1.1"
 __all__=["sh", "Process", "cliargs", "log_decorator"]
 
 from process import sh, Process
-from decorators import cliargs, log_decorator, indir
+from decorators import cliargs, redirect_decorator, redirect, indir
 
