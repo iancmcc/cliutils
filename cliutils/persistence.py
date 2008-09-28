@@ -58,6 +58,9 @@ class _ConfigSection(object):
     def values(self):
         return [self[key] for key in self.keys()]
 
+    def has_option(self, option):
+        return option in self.keys()
+
 
 class ConfigStorage(object):
 
@@ -86,6 +89,9 @@ class ConfigStorage(object):
         return self._config.sections()
     sections = keys
 
+    def has_section(self, section):
+        return self._config.has_section(section)
+
 
 def config(filename, directory=""):
     """
@@ -110,5 +116,5 @@ def db(filename, directory=""):
     relative to the user's home directory.
     """
     directory = storage_dir(directory)
-    return shelve.open(os.path.join(directory, filename))
+    return shelve.open(os.path.join(directory, filename), writeback=True)
 
