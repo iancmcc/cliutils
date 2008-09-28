@@ -49,5 +49,5 @@ def db(filename, directory=""):
     relative to the user's home directory.
     """
     directory = storage_dir(directory)
-    return shelve(os.path.join(directory, filename))
+    return shelve.open(os.path.join(directory, filename))
 
