@@ -23,8 +23,10 @@ def decorator(callable):
     inner.__dict__.update(callable.__dict__)
     return inner
 
+
 class CLIargsError(Exception):
     "Arguments were not passed in correctly."
+
 
 @decorator
 def cliargs(callable):
@@ -63,11 +65,25 @@ def cliargs(callable):
             print callable.__doc__
     return inner
 
+
 def redirect(fobj):
     """
     Factory for a decorator that redirects sys.stdout to a given file-like
     object during function execution. Thus, C{print} statements can become
     logged statements.
+
+        >>> from StringIO import StringIO
+        >>> logfile = StringIO()
+        >>> logger = redirect(logfile)
+        >>> @logger
+        ... def func():
+        ...     print "ABCDEFGHIJK"
+        ... 
+        >>> func()
+        >>> logfile.seek(0)
+        >>> logfile.read().strip()
+        'ABCDEFGHIJK'
+
     """
     @decorator
     def logdecorator(callable):
@@ -79,25 +95,6 @@ def redirect(fobj):
             return result
         return inner
     return logdecorator
-
-def redirect_decorator(fobj):
-    """
-    Create a L{redirect} decorator for re-use.
-
-        >>> from StringIO import StringIO
-        >>> logfile = StringIO()
-        >>> logger = redirect_decorator(logfile)
-        >>> @logger
-        ... def func():
-        ...     print "ABCDEFGHIJK"
-        ... 
-        >>> func()
-        >>> logfile.seek(0)
-        >>> logfile.read().strip()
-        'ABCDEFGHIJK'
-
-    """
-    return redirect(fobj)
 
 
 def indir(newdir):
@@ -129,3 +126,14 @@ def indir(newdir):
         return inner
     return dec
 
+
+def logged(fobj):
+    """
+    Provided for backwards compatibility with pre-0.1.3.
+    Will be removed in 0.1.5.
+    """
+    import warnings
+    warnings.warn('The logged decorator is deprecated. Please use redirect'
+                  ' instead.', DeprecationWarning, stacklevel=2)
+    return redirect(fobj)
+log_decorator = logged

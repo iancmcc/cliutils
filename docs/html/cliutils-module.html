@@ -58,10 +58,11 @@
 <p>A collection of utilities easing the creation of command line 
   scripts.</p>
   <p>cliutils is pure Python with no dependencies.</p>
-  <p>At the moment, the module provides three disparate features: Process 
-  objects, a command-line argument parsing decorator, a logging decoratory 
-  factory, and a decorator factory that runs functions after changing to a 
-  given directory.</p>
+  <p>The package provides several features that may aid the simple CLI 
+  utility-writer. Process objects give a simple way to get output from 
+  shell commands; the <code>persistence</code> module provides easy access 
+  to .ini-style configuration files; a collection of decorators eases some 
+  common patterns.</p>
   <h1 class="heading">Process objects</h1>
     <p>Although it isn't very difficult to execute shell commands from a 
     Python script, there are several lines of overhead in the standard 
@@ -89,8 +90,74 @@
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span>sh.echo([<span class="py-string">&quot;spam&quot;</span>, <span class="py-string">&quot;and&quot;</span>, <span class="py-string">&quot;eggs&quot;</span>])
 <span class="py-output">spam and eggs</span></pre>
-  <h1 class="heading">The <a href="cliutils.decorators-module.html#cliargs" class="link">cliargs</a> decorator</h1>
-    <p>A common pattern for shell scripts is:</p>
+  <h1 class="heading">Persistence</h1>
+    <p>There's a bit of overhead involved in finding a writable directory 
+    suitable for storing a config file or a persistent settings hash. The 
+    <a href="cliutils.persistence-module.html#storage_dir" 
+    class="link">storage_dir</a> function removes that overhead. It accepts
+    an optional directory name; if it represents an absolute path, it will 
+    be treated as such. Otherwise, it will be treated as a path relative to
+    a writeable directory. On Windows, that directory wil be the roaming 
+    profile Application Data directory; on *nix, it will be the current 
+    user's home directory. If the resulting path doesn't exist, it will be 
+    created.</p>
+    <p>For example, finding a path to store a persistent configuration file
+    is as easy as: <code>f = storage_dir('.myscript.cfg')</code>. Of 
+    course, it's easier still with the <a 
+    href="cliutils.persistence-module.html#config" class="link">config</a> 
+    function (explained below).</p>
+    <p>The <a href="cliutils.persistence-module.html#config" 
+    class="link">config</a> function loads or creates a .ini-style config 
+    file at a given directory, using ConfigParser; however, it is an 
+    improvement in two respects. First, it is passed through <a 
+    href="cliutils.persistence-module.html#storage_dir" 
+    class="link">storage_dir</a>, so locating the config file is easier.  
+    Second, it returns an instance of the <a 
+    href="cliutils.persistence.ConfigStorage-class.html" class="link" 
+    onclick="show_private();">persistence.ConfigStorage</a> class, which 
+    wraps a ConfigParser instance to provide a dictionary-like interface. 
+    Sections and options may be accessed like nested dictionaries. In 
+    addition, the file is automatically saved when values are set.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> tempfile; filename = tempfile.mkstemp()[1]
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg = config(filename)
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg[<span class="py-string">'sec1'</span>][<span class="py-string">'option2'</span>] = 75
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg[<span class="py-string">'sec2'</span>][<span class="py-string">'option1'</span>] = <span class="py-string">&quot;Some String&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg[<span class="py-string">'sec2'</span>][<span class="py-string">'option2'</span>] = <span class="py-string">&quot;Another value&quot;</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>f = file(filename)
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span> f.read()
+<span class="py-output">[sec1]</span>
+<span class="py-output">option2 = 75</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">[sec2]</span>
+<span class="py-output">option2 = Another value</span>
+<span class="py-output">option1 = Some String</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span>
+<span class="py-output">&lt;BLANKLINE&gt;</span></pre>
+    <p>Finally, the <a href="cliutils.persistence-module.html#db" 
+    class="link">db</a> function returns a persistent dictionary, again run
+    through <a href="cliutils.persistence-module.html#storage_dir" 
+    class="link">storage_dir</a> to make file creation and access simple. 
+    It uses the <code>shelve</code> module to create or load a pickled 
+    dictionary from a given filename. When the dictionary is modified, the 
+    pickle is saved. This allows for a simple, flexible database when it's 
+    unimportant that the user be able to modify directly the data stored 
+    therein. For all intents and purposes, it may be treated as a regular 
+    dictionary in the code.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> tempfile; filename = tempfile.mkstemp()[1]
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg = db(<span class="py-string">'.test-ignore'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg[<span class="py-string">'option1'</span>] = 10L
+<span class="py-prompt">&gt;&gt;&gt; </span>cfg[<span class="py-string">'option2'</span>] = [1, 2, 3, 4, (5, 6)]
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">print</span> cfg
+<span class="py-output">{'option2': [1, 2, 3, 4, (5, 6)], 'option1': 10L}</span></pre>
+    <p>See the <code>shelve</code> documentation for more details. The only
+    thing added by this package is the mutation of the file path by <a 
+    href="cliutils.persistence-module.html#storage_dir" 
+    class="link">storage_dir</a>.</p>
+  <h1 class="heading">Decorators</h1>
+    <h2 class="heading">The <a href="cliutils.decorators-module.html#cliargs" class="link">cliargs</a> decorator</h2>
+      <p>A common pattern for shell scripts is:</p>
 <pre class="literalblock">
    def main():
        parser = make_an_option_parser()
@@ -100,47 +167,48 @@
    if __name__==&quot;__main__&quot;:
        main()
 </pre>
-    <p>Creation of shell scripts using <code>setuptools</code>' 
-    <code>entry_points</code> results in a similar pattern; a function is 
-    called with no arguments, and must do its own command-line argument 
-    parsing. This makes sense in some cases, where complex argument parsing
-    is required. In simple cases, however, where parsing of a few arguments
-    or keywords is required, the <a 
-    href="cliutils.decorators-module.html#cliargs" class="link">cliargs</a>
-    decorator will be of use. It does a simple parse of 
-    <code>sys.argv</code>, using a parsing algorithm based on some code in 
-    <code>getopt</code>, and calls the decorated function with the 
-    results:</p>
+      <p>Creation of shell scripts using <code>setuptools</code>' 
+      <code>entry_points</code> results in a similar pattern; a function is
+      called with no arguments, and must do its own command-line argument 
+      parsing. This makes sense in some cases, where complex argument 
+      parsing is required. In simple cases, however, where parsing of a few
+      arguments or keywords is required, the <a 
+      href="cliutils.decorators-module.html#cliargs" 
+      class="link">cliargs</a> decorator will be of use. It does a simple 
+      parse of <code>sys.argv</code>, using a parsing algorithm based on 
+      some code in <code>getopt</code>, and calls the decorated function 
+      with the results:</p>
 <pre class="literalblock">
    @cliargs
    def myScript(anarg, anotherarg, someval=&quot;default&quot;)
        &quot;Usage: myscript anarg anotherarg [--someval VALUE]&quot;
        print anarg anotherarg someval
 </pre>
-    <p>When that function is called as a result of a command line script, 
-    such as:</p>
+      <p>When that function is called as a result of a command line script,
+      such as:</p>
 <pre class="literalblock">
    $ myscript val1 val2 --someflag somevalue 
 </pre>
-    <p><a href="cliutils.decorators-module.html#cliargs" 
-    class="link">cliargs</a> will parse <code>sys.argv</code> and pass the 
-    results into myScript. If improper arguments are passed such that a 
-    <code>TypeError</code> is raised, the docstring of the function will be
-    printed; this makes that an ideal place to include a usage string.</p>
-    <p><a href="cliutils.decorators-module.html#cliargs" 
-    class="link">cliargs</a> is of course limited to very simple cases. 
-    More complex argument parsing will require the use of the 
-    <code>getopt</code> or <code>optparse</code> modules.</p>
-  <h1 class="heading"><a href="cliutils.decorators-module.html#log_decorator" class="link">log_decorator</a></h1>
-    <p><a href="cliutils.decorators-module.html#log_decorator" 
-    class="link">log_decorator</a> is an almost trivially simple decorator 
-    factory. When called with a file-like object, it returns a decorator 
-    that redirects <code>sys.stdout</code> to that file for the duration of
-    the execution of the decorated function.</p>
+      <p><a href="cliutils.decorators-module.html#cliargs" 
+      class="link">cliargs</a> will parse <code>sys.argv</code> and pass 
+      the results into myScript. If improper arguments are passed such that
+      a <code>TypeError</code> is raised, the docstring of the function 
+      will be printed; this makes that an ideal place to include a usage 
+      string.</p>
+      <p><a href="cliutils.decorators-module.html#cliargs" 
+      class="link">cliargs</a> is of course limited to very simple cases. 
+      More complex argument parsing will require the use of the 
+      <code>getopt</code> or <code>optparse</code> modules.</p>
+    <h2 class="heading"><a href="cliutils.decorators-module.html#redirect" class="link">redirect</a></h2>
+      <p><a href="cliutils.decorators-module.html#redirect" 
+      class="link">redirect</a> is an almost trivially simple decorator 
+      factory. When called with a file-like object, it returns a decorator 
+      that redirects <code>sys.stdout</code> to that file for the duration 
+      of the execution of the decorated function.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile = StringIO()
-<span class="py-prompt">&gt;&gt;&gt; </span>logger = log_decorator(logfile)
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = redirect(logfile)
 <span class="py-prompt">&gt;&gt;&gt; </span>@logger
 <span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">func</span>():
 <span class="py-more">... </span>    <span class="py-keyword">print</span> <span class="py-string">&quot;ABCDEFGHIJK&quot;</span>
@@ -149,15 +217,27 @@
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile.seek(0)
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile.read().strip()
 <span class="py-output">'ABCDEFGHIJK'</span></pre>
-  <h1 class="heading"><a href="cliutils.decorators-module.html#indir" class="link" onclick="show_private();">indir</a></h1>
-    <p><a href="cliutils.decorators-module.html#indir" class="link" 
-    onclick="show_private();">indir</a> is a decorator factory that runs 
-    the decorated function in a given directory, changing back to the 
-    original directory on completion.</p>
+    <h2 class="heading"><a href="cliutils.decorators-module.html#indir" class="link" onclick="show_private();">indir</a></h2>
+      <p><a href="cliutils.decorators-module.html#indir" class="link" 
+      onclick="show_private();">indir</a> is a decorator factory that runs 
+      the decorated function in a given directory, changing back to the 
+      original directory on completion.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> os
+<span class="py-prompt">&gt;&gt;&gt; </span>d = os.path.realpath(<span class="py-string">'/etc'</span>)
+<span class="py-prompt">&gt;&gt;&gt; </span>curdir = os.path.realpath(os.curdir)
+<span class="py-prompt">&gt;&gt;&gt; </span>@indir(d)
+<span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">whereami</span>():
+<span class="py-more">... </span>    return os.path.realpath(os.curdir)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>whereami() == d
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>os.path.realpath(os.curdir) == curdir
+<span class="py-output">True</span></pre>
 
 <hr />
 <div class="fields">      <p><strong>Version:</strong>
-        0.1.1
+        0.1.3
       </p>
 </div><!-- ==================== SUBMODULES ==================== -->
 <a name="section-Submodules"></a>
@@ -179,6 +259,7 @@
   <tr><td class="summary">
   <ul class="nomargin">
     <li class="private"> <strong class="uidlink"><a href="cliutils.decorators-module.html" onclick="show_private();">cliutils.decorators</a></strong>    </li>
+    <li class="private"> <strong class="uidlink"><a href="cliutils.persistence-module.html" onclick="show_private();">cliutils.persistence</a></strong>    </li>
     <li class="private"> <strong class="uidlink"><a href="cliutils.process-module.html" onclick="show_private();">cliutils.process</a></strong>    </li>
   </ul></td></tr>
 </table>
@@ -252,11 +333,67 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cliutils-module.html#log_decorator" class="summary-sig-name">log_decorator</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
-      Create a <a href="cliutils.decorators-module.html#logged" 
-      class="link">logged</a> decorator for re-use.</td>
+          <td><span class="summary-sig"><a href="cliutils-module.html#redirect" class="summary-sig-name">redirect</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
+      Factory for a decorator that redirects sys.stdout to a given 
+      file-like object during function execution.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#redirect">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils-module.html#indir" class="summary-sig-name">indir</a>(<span class="summary-sig-arg">newdir</span>)</span><br />
+      Factory for decorator that ensures the decorated function is run in a
+      specified directory, then changes back to original directory.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#indir">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils-module.html#config" class="summary-sig-name">config</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">directory</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Open and parse a config file <code>filename</code> in an optional 
+      given directory <code>directory</code>.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.persistence-pysrc.html#config">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils-module.html#db" class="summary-sig-name">db</a>(<span class="summary-sig-arg">filename</span>,
+        <span class="summary-sig-arg">directory</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span><br />
+      Create or load a pickled dictionary from <code>filename</code> in 
+      optional <code>directory</code>.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.persistence-pysrc.html#db">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -340,26 +477,27 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="log_decorator"></a>
+<a name="redirect"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">log_decorator</span>(<span class="sig-arg">fobj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">redirect</span>(<span class="sig-arg">fobj</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#redirect">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
-  <p>Create a <a href="cliutils.decorators-module.html#logged" 
-  class="link">logged</a> decorator for re-use.</p>
+  <p>Factory for a decorator that redirects sys.stdout to a given file-like
+  object during function execution. Thus, <code>print</code> statements can
+  become logged statements.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile = StringIO()
-<span class="py-prompt">&gt;&gt;&gt; </span>logger = log_decorator(logfile)
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = redirect(logfile)
 <span class="py-prompt">&gt;&gt;&gt; </span>@logger
 <span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">func</span>():
 <span class="py-more">... </span>    <span class="py-keyword">print</span> <span class="py-string">&quot;ABCDEFGHIJK&quot;</span>
@@ -368,6 +506,89 @@
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile.seek(0)
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile.read().strip()
 <span class="py-output">'ABCDEFGHIJK'</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="indir"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">indir</span>(<span class="sig-arg">newdir</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#indir">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Factory for decorator that ensures the decorated function is run in a 
+  specified directory, then changes back to original directory.</p>
+<pre class="py-doctest">
+<span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">import</span> tempfile
+<span class="py-prompt">&gt;&gt;&gt; </span>realpath = os.path.realpath
+<span class="py-prompt">&gt;&gt;&gt; </span>new, cur = map(realpath, (tempfile.mkdtemp(), os.curdir))
+<span class="py-prompt">&gt;&gt;&gt; </span>@indir(new)
+<span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">whereami</span>():
+<span class="py-more">... </span>    return realpath(os.curdir)
+<span class="py-more">...</span>
+<span class="py-prompt">&gt;&gt;&gt; </span>whereami() == new
+<span class="py-output">True</span>
+<span class="py-output"></span><span class="py-prompt">&gt;&gt;&gt; </span>realpath(os.curdir) == cur
+<span class="py-output">True</span></pre>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="config"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">config</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">directory</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.persistence-pysrc.html#config">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Open and parse a config file <code>filename</code> in an optional 
+  given directory <code>directory</code>.</p>
+  <p><code>directory</code> will be passed through <a 
+  href="cliutils.persistence-module.html#storage_dir" 
+  class="link">storage_dir</a>, so it may be a path relative to the user's 
+  home directory. If left blank, therefore, it will be the user's home 
+  directory itself.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="db"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">db</span>(<span class="sig-arg">filename</span>,
+        <span class="sig-arg">directory</span>=<span class="sig-default"><code class="variable-quote">'</code><code class="variable-string"></code><code class="variable-quote">'</code></span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.persistence-pysrc.html#db">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Create or load a pickled dictionary from <code>filename</code> in 
+  optional <code>directory</code>.</p>
+  <p><code>directory</code> will be passed through <a 
+  href="cliutils.persistence-module.html#storage_dir" 
+  class="link">storage_dir</a>, so it may be a path relative to the user's 
+  home directory.</p>
   <dl class="fields">
   </dl>
 </td></tr></table>
@@ -399,7 +620,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Sep 27 12:03:41 2008
+    Generated by Epydoc 3.0.1 on Sat Oct  4 00:23:29 2008
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

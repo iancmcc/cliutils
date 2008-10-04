@@ -6,7 +6,7 @@ ez_setup.use_setuptools()
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.2'
+version = '0.1.3'
 
 LONG_DESC = """
 

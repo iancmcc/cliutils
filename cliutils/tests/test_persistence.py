@@ -36,6 +36,5 @@ class TestPersistence(unittest.TestCase):
         self.assertEqual(config2['sec1'].items(), [('option2', '75'),])
 
 
-
 if __name__=="__main__":
     unittest.main()

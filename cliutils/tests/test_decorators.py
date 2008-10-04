@@ -5,7 +5,7 @@ import sys
 import tempfile
 from StringIO import StringIO
 
-from cliutils.decorators import cliargs, redirect, decorator, indir
+from cliutils.decorators import cliargs, redirect, decorator, indir, logged
 
 class TestDecorators(unittest.TestCase):
 

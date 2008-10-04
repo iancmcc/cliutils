@@ -56,6 +56,32 @@
 </table>
 <!-- ==================== MODULE DESCRIPTION ==================== -->
 <h1 class="epydoc">Module decorators</h1><p class="nomargin-top"><span class="codelink"><a href="cliutils.decorators-pysrc.html">source&nbsp;code</a></span></p>
+<!-- ==================== CLASSES ==================== -->
+<a name="section-Classes"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Classes</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-Classes"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a href="cliutils.decorators.CLIargsError-class.html" class="summary-name">CLIargsError</a><br />
+      Arguments were not passed in correctly.
+    </td>
+  </tr>
+</table>
 <!-- ==================== FUNCTIONS ==================== -->
 <a name="section-Functions"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -115,29 +141,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a href="cliutils.decorators-module.html#logged" class="summary-sig-name">logged</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
+          <td><span class="summary-sig"><a href="cliutils.decorators-module.html#redirect" class="summary-sig-name">redirect</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
       Factory for a decorator that redirects sys.stdout to a given 
       file-like object during function execution.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="cliutils.decorators-module.html#log_decorator" class="summary-sig-name">log_decorator</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
-      Create a <a href="cliutils.decorators-module.html#logged" 
-      class="link">logged</a> decorator for re-use.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#redirect">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -156,6 +164,40 @@
       specified directory, then changes back to original directory.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="cliutils.decorators-pysrc.html#indir">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils.decorators-module.html#logged" class="summary-sig-name" onclick="show_private();">logged</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
+      Provided for backwards compatibility with pre-0.1.3.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="cliutils.decorators-module.html#log_decorator" class="summary-sig-name" onclick="show_private();">log_decorator</a>(<span class="summary-sig-arg">fobj</span>)</span><br />
+      Provided for backwards compatibility with pre-0.1.3.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -237,47 +279,27 @@
   </dl>
 </td></tr></table>
 </div>
-<a name="logged"></a>
+<a name="redirect"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">logged</span>(<span class="sig-arg">fobj</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">redirect</span>(<span class="sig-arg">fobj</span>)</span>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#redirect">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
   <p>Factory for a decorator that redirects sys.stdout to a given file-like
   object during function execution. Thus, <code>print</code> statements can
   become logged statements.</p>
-  <dl class="fields">
-  </dl>
-</td></tr></table>
-</div>
-<a name="log_decorator"></a>
-<div>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr><td>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">log_decorator</span>(<span class="sig-arg">fobj</span>)</span>
-  </h3>
-  </td><td align="right" valign="top"
-    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#log_decorator">source&nbsp;code</a></span>&nbsp;
-    </td>
-  </tr></table>
-  
-  <p>Create a <a href="cliutils.decorators-module.html#logged" 
-  class="link">logged</a> decorator for re-use.</p>
 <pre class="py-doctest">
 <span class="py-prompt">&gt;&gt;&gt; </span><span class="py-keyword">from</span> StringIO <span class="py-keyword">import</span> StringIO
 <span class="py-prompt">&gt;&gt;&gt; </span>logfile = StringIO()
-<span class="py-prompt">&gt;&gt;&gt; </span>logger = log_decorator(logfile)
+<span class="py-prompt">&gt;&gt;&gt; </span>logger = redirect(logfile)
 <span class="py-prompt">&gt;&gt;&gt; </span>@logger
 <span class="py-more">... </span><span class="py-keyword">def</span> <span class="py-defname">func</span>():
 <span class="py-more">... </span>    <span class="py-keyword">print</span> <span class="py-string">&quot;ABCDEFGHIJK&quot;</span>
@@ -322,6 +344,46 @@
   </dl>
 </td></tr></table>
 </div>
+<a name="logged"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">logged</span>(<span class="sig-arg">fobj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Provided for backwards compatibility with pre-0.1.3. Will be removed 
+  in 0.1.5.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
+<a name="log_decorator"></a>
+<div class="private">
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">log_decorator</span>(<span class="sig-arg">fobj</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="cliutils.decorators-pysrc.html#logged">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Provided for backwards compatibility with pre-0.1.3. Will be removed 
+  in 0.1.5.</p>
+  <dl class="fields">
+  </dl>
+</td></tr></table>
+</div>
 <br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
@@ -349,7 +411,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Sat Sep 27 12:03:41 2008
+    Generated by Epydoc 3.0.1 on Sat Oct  4 00:23:29 2008
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
