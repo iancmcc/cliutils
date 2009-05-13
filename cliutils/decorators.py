@@ -41,21 +41,22 @@ def cliargs(callable):
     If the wrong args/kwargs are passed in such that a TypeError is raised, the
     docstring is printed, so that's an ideal place to put usage information.
     """
-    def inner():
-        args = sys.argv[1:]
-        opts = {}
-        prog_args = []
-        while args:
-            if args[0].startswith('-'):
-                if args[1].startswith('-'):
-                    opts[args[0].lstrip('-')] = True
-                    args = args[1:]
+    def inner(*prog_args, **opts):
+        if not (prog_args or opts):
+            args = sys.argv[1:]
+            opts = {}
+            prog_args = []
+            while args:
+                if args[0].startswith('-'):
+                    if args[1].startswith('-'):
+                        opts[args[0].lstrip('-')] = True
+                        args = args[1:]
+                    else:
+                        opts[args[0].lstrip('-')] = args[1]
+                        args = args[2:]
                 else:
-                    opts[args[0].lstrip('-')] = args[1]
-                    args = args[2:]
-            else:
-                prog_args.append(args[0])
-                args = args[1:]
+                    prog_args.append(args[0])
+                    args = args[1:]
         try:
             try: 
                 return callable(*prog_args, **opts)

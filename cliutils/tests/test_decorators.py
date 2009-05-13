@@ -45,6 +45,11 @@ class TestDecorators(unittest.TestCase):
         args, kwargs = func()
         self.assertEqual(args, ('a', 'b', 'c'))
         self.assertEqual(kwargs, {'cde':'fgh', 'b':True})
+        
+        sys.argv[:] = []
+        args, kwargs = func('a', 'b', 'c', b=True, cde='fgh')
+        self.assertEqual(args, ('a', 'b', 'c'))
+        self.assertEqual(kwargs, {'cde':'fgh', 'b':True})
 
     def test_usage_failover(self):
         @cliargs
