@@ -143,7 +143,7 @@ class Process(object):
         """
         self._execute()
         if not hasattr(self, '_stderrstorage'):
-            self._stdoutstorage = StringIO(self._process.stderr.read().strip())
+            self._stderrstorage = StringIO(self._process.stderr.read().strip())
         return self._stderrstorage.getvalue()
 
     @property
